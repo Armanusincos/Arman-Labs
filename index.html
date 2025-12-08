@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>Система заметок</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+        :root{
+            --bg: #f5f7fa;
+            --card-bg: #ffffff;
+            --accent: #1e80ff;
+            --muted: #666;
+        }
+        *{box-sizing: border-box}
+        body {
+            font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+            background: var(--bg);
+            margin: 0;
+            padding: 24px;
+            color: #222;
+        }
+        h1 {
+            text-align: center;
+            margin: 0 0 18px 0;
+            font-size: 28px;
+        }
+        #controls {
+            max-width: 900px;
+            margin: 0 auto 18px;
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(30,30,30,0.06);
+        }
+        .row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+        .col { flex: 1 1 220px; }
+        label { font-size: 13px; color: var(--muted); display:block; margin-bottom:6px; }
+        input[type="text"], textarea, select { width: 100%; padding: 10px 12px; border: 1px solid #e1e6ee; border-radius: 8px; font-size: 14px; background: #fff; color: #111; }
+        textarea { min-height: 80px; resize: vertical; }
+        .small { width: 120px; }
+        #addBtn { background: var(--accent); color: #fff; border: none; padding: 12px 16px; border-radius: 10px; cursor: pointer; font-size: 15px; box-shadow: 0 6px 14px rgba(30,128,255,0.18); }
+        #addBtn:active { transform: translateY(1px); }
+        #notesContainer{ max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+        .note {
+            background: var(--card-bg);
+            padding: 12px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(10,10,20,0.04);
+            display: flex;
+            flex-direction: column;
+            min-height: 120px;
+            transition: transform .12s ease, box-shadow .12s ease;
+            overflow: hidden;
+        }
+        .note:hover { transform: translateY(-4px); box-shadow: 0 14px 30px rgba(10,10,20,0.08); }
+        .note h3 { margin: 0 0 8px 0; font-size: 16px; }
+        .note p { margin: 0; white-space: pre-wrap; overflow: hidden; }
+        .note small { margin-top: 8px; color: var(--muted); font-size: 12px; }
+        .note-controls { display:flex; gap:8px; margin-top:12px; align-items:center; }
+        .btn { padding: 8px; border-radius: 8px; cursor: pointer; border: none; font-size: 13px; }
+        .btn.small { padding: 6px 8px; font-size: 12px; }
+        .edit-btn { background: #f2c94c; color: #111; }
+        .delete-btn { background: #e74c3c; color: #fff; }
+        .save-btn { background: #2ecc71; color: #fff; }
+        .pin-btn { background: #1e80ff; color: #fff; }
+        input[type="color"] { width: 40px; height: 36px; padding: 0; border: none; background: transparent; cursor: pointer; }
+        .note .note-header { display:flex; justify-content:space-between; gap:8px; align-items:flex-start; }
+        .note.pinned { border: 2px solid #1e80ff; }
+        @media (max-width:600px){ .row { flex-direction: column; } .small { width: 100% } }
+    </style>
+</head>
+<body>
+    <h1>Система заметок</h1>
+
+    <div id="controls" aria-label="Controls">
+        <div class="row">
+            <div class="col">
+                <label for="titleInput">Заголовок</label>
+                <input id="titleInput" type="text" placeholder="Короткий заголовок">
+            </div>
+            <div class="col small">
+                <label for="noteColor">Цвет заметки (RGB)</label>
+                <input id="noteColor" type="color" value="#ffffff" title="Выбрать цвет заметки">
+            </div>
+            <div class="col small">
+                <label for="presetColors">Быстрые цвета</label>
+                <select id="presetColors">
+                    <option value="">— выбрать —</option>
+                    <option value="#ffffff">Белый</option>
+                    <option value="#fff4b2">Жёлтый</option>
+                    <option value="#c8f7dc">Зелёный</option>
+                    <option value="#d9e7ff">Синий</option>
+                    <option value="#ffd6d6">Розовый</option>
+                    <option value="#ffe9d1">Персиковый</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top:10px;">
+            <label for="textInput">Текст заметки</label>
+            <textarea id="textInput" placeholder="Напиши здесь..."></textarea>
+        </div>
+        <div style="margin-top:12px; display:flex; gap:10px; align-items:center;">
+            <button id="addBtn">➕ Добавить заметку</button>
+            <input id="searchInput" type="text" placeholder="Поиск по заголовку/тексту" style="flex:1;padding:10px;border-radius:8px;border:1px solid #e1e6ee;">
+            <select id="sortSelect" style="padding:10px;border-radius:8px;border:1px solid #e1e6ee;">
+                <option value="new">Сначала новые</option>
+                <option value="old">Сначала старые</option>
+            </select>
+        </div>
+    </div>
+
+    <main id="notesContainer" aria-live="polite"></main>
+
+    <script type="module" src="./main.js"></script>
+</body>
+</html>
